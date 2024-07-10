@@ -171,7 +171,8 @@ def main():
     args = get_parser().parse_args()
     print(args)
     refiner = refine.Refiner(device='cuda:0')
-
+    if not os.path.exists(args.output_dir):
+        os.makedirs(args.output_dir)
     # divide-and-conquer algorithm
     if args.preprocess:
         if not args.start_id:
@@ -192,18 +193,27 @@ def main():
 
         segmentation_id = 1
         cnt = 0
-
         for image_name in tqdm(os.scandir(args.input_dir)):
             image_name = image_name.name
+            if image_name.startswith("re_"):
+                continue
             cnt += 1
-            if cnt < args.start_id or cnt >= args.end_id: continue
+            if cnt < args.start_id or cnt > args.end_id: continue
 
             # coco format annotator initialization
             divide_conquer_masks = []
             output["image"], output["annotations"] = {}, []
 
             # save path initialization
-            image_id = int(image_name.replace(".jpg", "").replace("sa_", ""))
+
+            # image_id = int(image_name.replace(".jpg", "").replace("sa_", ""))
+            image_id = ''
+            for i in image_name.replace(".jpg", ""):
+                if 'A'<=i<='Z':
+                    image_id+=(str(ord(i)))
+                else:
+                    image_id+=(i)
+            image_id = int(image_id)
             save_path = f"{args.output_dir}/{image_name.replace('.jpg', '.json')}"
             assert not os.path.exists(save_path), "an annotation already exists in this path"
 

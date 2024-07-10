@@ -1,13 +1,8 @@
+DATA=$1
+SAVE=$2
 python divide_conquer.py \
-    --input-dir /PATH/TO/DATASETS \
-    --output-dir pseudo_masks \
-    --start-id 50 \
-    --end-id 100 \
+    --input-dir $DATA \
+    --output-dir $SAVE \
     --preprocess True \
-    --opts MODEL.WEIGHTS cutler_cascade_final.pth
-
-python divide_conquer.py \
-    --input-dir /PATH/TO/DATASETS \
-    --output-dir pseudo_masks\
     --postprocess True \
     --opts MODEL.WEIGHTS cutler_cascade_final.pth
