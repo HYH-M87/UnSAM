@@ -3,6 +3,8 @@ import cv2
 import os
 dire="JPEGImages"
 save="Resize_Img"
+if not os.path.exists(save):
+    os.makedirs(save)
 img_list = os.listdir(dire)
 for i in img_list:
     
